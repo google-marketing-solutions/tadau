@@ -1,2 +1,2 @@
-#Tadau
-Tadau offers a sample on how to TrAck Downalods, Adaption and Usage of gPS External Solutions
+# Tadau
+Tadau offers a sample on how to TrAck Downloads, Adaption and Usage of gPS External Solutions
