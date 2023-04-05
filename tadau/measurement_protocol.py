@@ -25,8 +25,8 @@ class Tadau():
                           'client_id', 'uuid', 'user_id', 'timestamp_micros']
 
     # Uses custom values, or defaults to standard
-    self.api_secret = params.get('api_secret') or 'H-PGtkLvQbyKlgy_kPsp6Q'
-    self.measurement_id = params.get('measurement_id') or'G-9JKYHEPWY0'
+    self.api_secret = params.get('api_secret') or 'shyN6ac9RuyxdgLQZRIvyg'
+    self.measurement_id = params.get('measurement_id') or 'G-SWYK2BS415'
 
   @staticmethod
   def _validate_param(key: str, value: Any, reserved_keys: Sequence[str]) -> bool:
@@ -50,7 +50,7 @@ class Tadau():
         # Sets client_id with an empty payload
         payload: Dict[str, Any] = {
             'non_personalized_ads': True,
-            'client_id': client_id,
+            'client_id': f"{client_id}",
         }
 
         # Only adds params that aren't reserved keywords
@@ -62,7 +62,7 @@ class Tadau():
 
         # Sets user_id if any
         if user_id:
-          payload['user_id'] = user_id
+          payload['user_id'] = f"{user_id}"
 
         # Sends to GA4
         requests.post(

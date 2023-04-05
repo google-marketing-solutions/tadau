@@ -15,7 +15,7 @@
 import pytest
 import requests_mock
 
-from main import Tadau
+from tadau.measurement_protocol import Tadau
 
 @pytest.fixture
 def uploader():
