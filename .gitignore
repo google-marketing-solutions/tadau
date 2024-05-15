@@ -1,6 +1,0 @@
-__pycache__
-dist/*
-*.egg-info
-*.cfg
-*.toml
-config.py
