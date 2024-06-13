@@ -32,7 +32,7 @@ class MeasurementProtocolTest(absltest.TestCase):
     """
     super().setUp()
     self.tadau = measurement_protocol.Tadau(
-        api_secret='1232', measurement_id='G-1223214'
+        api_secret='1232', measurement_id='G-1223214', opt_in=True
     )
 
   def test_event_name_validation(self):
@@ -97,7 +97,7 @@ class MeasurementProtocolTest(absltest.TestCase):
 
   def test_incorrect_load(self):
     with self.assertRaises(AssertionError):
-      measurement_protocol.Tadau()
+      measurement_protocol.Tadau(opt_in=True)
 
   def test_load_config_file(self):
     config_file = resources.GetResourceFilename(
@@ -109,6 +109,7 @@ class MeasurementProtocolTest(absltest.TestCase):
 
     self.assertEqual(tadau.api_secret, '1232')
     self.assertEqual(tadau.measurement_id, 'G-1223214')
+    self.assertEqual(tadau.opt_in, True)
     self.assertEqual(
         tadau.fixed_dimensions.get('deploy_id'),
         'bdb40a38-f845-4c04-abdc-1a51528d45e2',
@@ -119,6 +120,7 @@ class MeasurementProtocolTest(absltest.TestCase):
     tadau_with_fixed_dimensions = measurement_protocol.Tadau(
         api_secret='1232',
         measurement_id='G-1223214',
+        opt_in=True,
         fixed_dimensions={'deploy_id': '123456asc'},
     )
     with requests_mock.Mocker() as m:
@@ -195,6 +197,24 @@ class MeasurementProtocolTest(absltest.TestCase):
           m.last_request.json()['events'][0]['name'], 'error-event'
       )
 
+  def test_not_opted_in_load(self):
+
+    with self.assertRaises(AssertionError):
+      tadau = measurement_protocol.Tadau()
+
+      with requests_mock.Mocker() as m:
+        m.post(requests_mock.ANY, status_code=204)
+
+        tadau.send_ads_event(
+            'audience-created',
+            'data integration',
+            'GAds',
+            '123456789',
+            'audienceList',
+            '9812176317',
+        )
+
+      self.assertEqual(m.call_count, 0)
 
 if __name__ == '__main__':
   absltest.main()

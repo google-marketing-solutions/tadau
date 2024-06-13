@@ -67,7 +67,8 @@ class Tadau:
   a config file location to a yaml file with them (config_file_location)
 
   Example usage 1:
-    tadau = Tadau(api_secret=my_api_secret, measurement_id=my_measurement_id)
+    tadau = Tadau(api_secret=my_api_secret, measurement_id=my_measurement_id,
+    opt_in=os.environ.get('TADAU_OPT_IN', 'false'))
     tadau.send_events(events)
 
   Example usage 2:
@@ -76,8 +77,9 @@ class Tadau:
 
   Example usage with fixed dimensions:
     tadau = Tadau(
-        my_api_secret,
-        my_measurement_id,
+        api_secret=my_api_secret,
+        measurement_id=my_measurement_id,
+        opt_in=True,
         fixed_dimensions={'deploy_id': '123456asc'}
     )
     tadau.send_events(events)
@@ -85,6 +87,7 @@ class Tadau:
   Attributes:
     api_secret: The API secret of the chosen GA property.
     measurement_id: The measurement ID of the chosen GA property.
+    opt_in: Whether to opt in or not.
     fixed_dimensions: Fixed dimensions to be sent with every single event
       fired.
   """
@@ -94,6 +97,7 @@ class Tadau:
       *,
       api_secret: Optional[str] = None,
       measurement_id: Optional[str] = None,
+      opt_in: Optional[bool] = False,
       fixed_dimensions: Optional[dict[str, Union[str, int, float]]] = None,
       config_file_location: Optional[str] = None,
   ):
@@ -102,6 +106,7 @@ class Tadau:
     Args:
       api_secret: The API secret of the chosen GA property.
       measurement_id: The measurement ID of the chosen GA property.
+      opt_in: Whether to opt in or not.
       fixed_dimensions: Fixed dimensions to be sent with every single event
       fired.
       config_file_location: Local filesystem path to a .yaml file containing
@@ -116,10 +121,12 @@ class Tadau:
       if config:
         api_secret = config.get('api_secret')
         measurement_id = config.get('measurement_id')
+        opt_in = self._is_opt_in(config.get('opt_in', 'false'))
         fixed_dimensions = config.get('fixed_dimensions')
 
     self.api_secret = api_secret
     self.measurement_id = measurement_id
+    self.opt_in = opt_in
     self._target_url = (
         f'{self._api_url}?api_secret={self.api_secret}&'
         f'measurement_id={self.measurement_id}'
@@ -127,13 +134,27 @@ class Tadau:
     # These parameters will be sent with every single event sent.
     self.fixed_dimensions = fixed_dimensions or dict()
 
-    # Validates if used correctly.
-    if not self._is_valid_instance() and __debug__:
-      raise AssertionError(
-          'Tadau: Class could not be initiated because api_secret and/or'
-          f' measurement_id is invalid ({self.api_secret},'
-          f' {self.measurement_id})'
-      )
+    # Validates if opted in and used correctly.
+    if __debug__:
+      if not self.opt_in:
+        raise AssertionError('Tadau: Class initiated not opted in')
+      elif not self._is_valid_instance():
+        raise AssertionError(
+            'Tadau: Class could not be initiated because api_secret and/or'
+            f' measurement_id is invalid ({self.api_secret},'
+            f' {self.measurement_id})'
+        )
+
+  def _is_opt_in(self, opt_in: str) -> bool:
+    """Checks whether Tadau is opt in or not based on the opt_in value.
+
+    Args:
+      opt_in: The opt in value.
+
+    Returns:
+      True or false
+    """
+    return opt_in.lower().strip() == 'true'
 
   def _is_valid_instance(self) -> bool:
     """Checks whether Tadau is being initiated with all required parameters.
@@ -189,7 +210,9 @@ class Tadau:
     Args:
       events: a list of objects containing at least name and client id keys
     """
-    if not self._is_valid_instance():
+    if not self.opt_in:
+      return
+    elif not self._is_valid_instance():
       return
     elif not events:
       # Returning to avoid sending empty hits (e.g. only a client id).

@@ -14,6 +14,7 @@
 
 api_secret: {{api_secret}}
 measurement_id: {{measurement_id}}
+opt_in: {{opt_in}}
 
 fixed_dimensions:
     deploy_id: {{deployment_id}}

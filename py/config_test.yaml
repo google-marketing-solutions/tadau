@@ -14,9 +14,10 @@
 
 api_secret: "1232"
 measurement_id: "G-1223214"
+opt_in: "true"
 
 fixed_dimensions:
-    deploy_id: "bdb40a38-f845-4c04-abdc-1a51528d45e2" 
+    deploy_id: "bdb40a38-f845-4c04-abdc-1a51528d45e2"
     deploy_infra: "GCP"
     deploy_created_time: "1713356634"
     deploy_updated_time: "1713356634"
