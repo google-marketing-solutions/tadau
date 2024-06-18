@@ -13,7 +13,6 @@
 # limitations under the License.
 
 name: Push and Deploy Tadau for AppsScript
-uses: daikikatsuragawa/clasp-action@v1.1.0
 
 on:
   workflow_dispatch:
