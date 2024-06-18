@@ -23,13 +23,9 @@ on:
   schedule:
     - cron: "0 0 * * SUN"
 
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./ts
     steps:
       - name: Install clasp
         id: install-clasp
