@@ -74,11 +74,16 @@ jobs:
       - name: Push script to scripts.google.com
         id: clasp-push
         if: ${{ github.event_name	!= 'schedule'}}
-        run: cd /home/runner/work/tadau/tadau/ts && clasp push -f
+        run: |
+          cd ts
+          ls -al
+          clasp push -f
 
       - name: Deploy Script
         id: clasp-deploy
         if: ${{env.DEPLOYMENT_ID && (github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/main'))}}
-        run: cd /home/runner/work/tadau/tadau/ts && clasp deploy -i "$DEPLOYMENT_ID" -d "$GITHUB_REF"
+        run: |
+          cd ts
+          clasp deploy -i "$DEPLOYMENT_ID" -d "$GITHUB_REF"
         env:
           DEPLOYMENT_ID: ${{ secrets.DEPLOYMENT_ID }}
