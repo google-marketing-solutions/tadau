@@ -65,7 +65,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set scriptId in .clasp.json file
-        working-directory: ts
+        working-directory: ./ts
         id: set-script-id
         if: ${{ github.event_name	!= 'schedule' && env.SCRIPT_ID}}
         run: jq '.scriptId = "${{env.SCRIPT_ID}}"' .clasp.json > /tmp/.clasp.json && mv /tmp/.clasp.json .clasp.json
@@ -73,13 +73,13 @@ jobs:
           SCRIPT_ID: ${{secrets.SCRIPT_ID}}
 
       - name: Push script to scripts.google.com
-        working-directory: ts
+        working-directory: ./ts
         id: clasp-push
         if: ${{ github.event_name	!= 'schedule'}}
         run: clasp push -f
 
       - name: Deploy Script
-        working-directory: ts
+        working-directory: ./ts
         id: clasp-deploy
         if: ${{env.DEPLOYMENT_ID && (github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/main'))}}
         run: clasp deploy -i "$DEPLOYMENT_ID" -d "$GITHUB_REF"
