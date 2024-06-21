@@ -1,2 +1,9 @@
-// DO NOT EDIT see http://go/typescript/build_defs#ts-config-setup
-{"extends": "../../../../../../blaze-bin/corp/gtech/ads/infrastructure/tadau/ts/tsconfig_editor.json"}
+{
+    "compilerOptions": {
+        "lib": [
+            "esnext"
+        ],
+        "experimentalDecorators": true,
+        "target": "ES2019"
+    }
+}
