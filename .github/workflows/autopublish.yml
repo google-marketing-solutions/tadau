@@ -42,7 +42,7 @@ jobs:
     - name: Build package
       run: |
         cd py
-        python -m build
+        python -m build --sdist --wheel --outdir dist/
 
     - name: Publish to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1

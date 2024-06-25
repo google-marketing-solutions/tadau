@@ -15,11 +15,7 @@
 """Builds Tadau."""
 
 import os
-
 import setuptools
-
-from py import version
-
 
 _README_PATH = os.path.join(
     os.path.dirname(os.path.dirname(__file__)), 'README.md'
@@ -30,7 +26,6 @@ with open(_README_PATH, encoding='utf-8') as file:
 
 setuptools.setup(
     name='tadau',
-    version=version.__version__,
     description=(
         'Tadau: TrAck Downloads, Adoption and Usage of external solutions.'
     ),
@@ -40,7 +35,10 @@ setuptools.setup(
     author_email='gps-tadau+copybara@google.com',
     url='https://github.com/google-marketing-solutions/tadau',
     license='Apache 2.0',
-    packages=setuptools.find_packages(),
+    packages=['tadau.py'],
+    package_dir={
+        'tadau.py': '.',
+    },
     include_package_data=True,
     scripts=[],
     install_requires=[
