@@ -16,9 +16,10 @@
 
 import os
 import setuptools
+from version import __version__  # import within package to avoid build error
 
 _README_PATH = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)), 'README.md'
+    os.path.dirname(__file__), 'README.md'
 )
 
 with open(_README_PATH, encoding='utf-8') as file:
@@ -26,6 +27,7 @@ with open(_README_PATH, encoding='utf-8') as file:
 
 setuptools.setup(
     name='tadau',
+    version=__version__,
     description=(
         'Tadau: TrAck Downloads, Adoption and Usage of external solutions.'
     ),
@@ -35,7 +37,7 @@ setuptools.setup(
     author_email='gps-tadau+copybara@google.com',
     url='https://github.com/google-marketing-solutions/tadau',
     license='Apache 2.0',
-    packages=['tadau.py'],
+    packages=['tadau.py'],  # The setup.py is in the same folder as the package.
     package_dir={
         'tadau.py': '.',
     },
@@ -44,7 +46,7 @@ setuptools.setup(
     install_requires=[
         'absl-py',
         'requests',
-        'yaml',
+        'pyyaml',
     ],
     requires_python='>=3.9',
     extras_require={},
