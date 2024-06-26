@@ -26,10 +26,17 @@ import yaml
 
 
 _GA_COLLECT_URL = 'https://www.google-analytics.com/mp/collect'
+_GA_REQUEST_KEYS = [
+    'name',
+    'client_id',
+    'user_id'
+]
 _GA_RESERVERD_KEYS = [
+        'api_secret',
+        'measurement_id',
         'app_instance_id',
         'uuid',
-        'timestamp_micros',
+        'timestamp_micros'
     ]
 
 
@@ -114,6 +121,7 @@ class Tadau:
     """
     self._api_url = _GA_COLLECT_URL
     self._reserved_keys = _GA_RESERVERD_KEYS
+    self._request_keys = _GA_REQUEST_KEYS
 
     # Checks if there is a configuration file to load.
     if config_file_location:
@@ -219,8 +227,12 @@ class Tadau:
       logging.debug('Tadau: events empty.')
       return
     for row in events:
-      # uses given client_id or generates a random one.
       try:
+        if not row.get('name'):
+          logging.warning('Tadau: Event name cannot be empty.')
+          continue
+
+        # Uses given client_id or generates a random one.
         client_id = row.get('client_id') or str(uuid.uuid4())
 
         # Sets client_id with an empty payload.
@@ -229,7 +241,7 @@ class Tadau:
             'client_id': f'{client_id}',
         }
 
-        event_reserved_keys = self._reserved_keys + ['name']
+        event_reserved_keys = self._reserved_keys + self._request_keys
         # Starts with fixed_dimensions and merges with incoming event
         # parameters.
         params = self.fixed_dimensions
@@ -237,7 +249,7 @@ class Tadau:
           # Only adds params that aren't reserved keywords.
           if _is_valid_param(k, v, event_reserved_keys):
             params[k] = v
-          elif k != 'name':
+          elif k not in self._request_keys:
             logging.warning(
                 'Tadau: Parameter %s with value %s is not valid', k, v
             )

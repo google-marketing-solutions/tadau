@@ -50,3 +50,4 @@ jobs:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }}
         packages-dir: "py/dist/"
+        skip-existing: true
