@@ -261,4 +261,52 @@ describe('Tadau', () => {
       },
     );
   });
+
+  it('should send events with fixed dimensions from properties', () => {
+    const scriptProperties = PropertiesService.getScriptProperties();
+    scriptProperties.setProperties({
+      'apiSecret': 'test_api_secret',
+      'measurementId': 'test_measurement_id',
+      'deployId': 'fake_id',
+      'deployInfra': 'fake_infra',
+      'deployCreatedTime': 'fake_created_time',
+      'deployUpdatedTime': 'fake_updated_time',
+    });
+    tadau = new Tadau({
+      loadConfigFromScriptProperties: true,
+      optIn: true,
+    });
+
+    const events = [
+      {
+        'name': 'test-event',
+        'test_param': 'test_value',
+      },
+    ];
+
+    tadau.sendEvents(events);
+
+    expect(urlFetchAppSpy).toHaveBeenCalledWith(
+      'https://www.google-analytics.com/mp/collect?api_secret=test_api_secret&measurement_id=test_measurement_id',
+      {
+        method: 'post',
+        payload: JSON.stringify({
+          'non_personalized_ads': true,
+          'client_id': 'test_client_id',
+          'events': [
+            {
+              'name': 'test-event',
+              'params': {
+                'deployId': 'fake_id',
+                'deployInfra': 'fake_infra',
+                'deployCreatedTime': 'fake_created_time',
+                'deployUpdatedTime': 'fake_updated_time',
+                'test_param': 'test_value',
+              },
+            },
+          ],
+        }),
+      },
+    );
+  });
 });

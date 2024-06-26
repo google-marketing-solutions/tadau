@@ -32,9 +32,9 @@
  *   optIn: true,
  * });
  *
- * // Using a config file.
+ * // Using script parameters.
  * const tadau = new Tadau({
- *   configFilePath: 'path/to/config.yaml',
+ *   loadConfigFromScriptProperties: true,
  *   optIn: true,
  * });
  *
@@ -116,7 +116,7 @@ interface TadauParams {
   apiSecret?: string;
   measurementId?: string;
   fixedDimensions?: {[key: string]: string | number | boolean};
-  configFilePath?: string; // Path to a YAML file with the configuration
+  loadConfigFromScriptProperties?: boolean;
   optIn?: boolean;
 }
 
@@ -144,11 +144,16 @@ export class Tadau {
   optIn?: boolean;
 
   constructor(params: TadauParams) {
-    const {apiSecret, measurementId, fixedDimensions, configFilePath, optIn} =
-      params;
+    const {
+      apiSecret,
+      measurementId,
+      fixedDimensions,
+      loadConfigFromScriptProperties,
+      optIn,
+    } = params;
 
-    if (configFilePath) {
-      const config = this.loadConfigFromYamlFile(configFilePath);
+    if (loadConfigFromScriptProperties) {
+      const config = this.loadConfigFromScriptProperties();
       this.apiSecret = config?.apiSecret || apiSecret;
       this.measurementId = config?.measurementId || measurementId;
       this.fixedDimensions = config?.fixedDimensions || fixedDimensions || {};
@@ -180,18 +185,29 @@ export class Tadau {
   }
 
   /**
-   * Loads the configuration from a YAML file.
-   * @param configFilePath The path to the YAML file.
+   * Loads the configuration from script properties.
    * @return The configuration.
    */
-  // tslint:disable-next-line:no-any
-  private loadConfigFromYamlFile(configFilePath: string): TadauConfig | void {
+  private loadConfigFromScriptProperties(): TadauConfig | void {
     try {
-      // TODO(): Figure out how to use the config file. Apps Script
-      // does not support reading yaml files, nor having any other files than
-      // .gs or .html files.
-      console.info('Tadau: Loading from config file is not implemented yet.');
-      return;
+      console.info('Tadau: Loading config from script properties.');
+      const scriptProperties = PropertiesService.getScriptProperties();
+      const scriptPropertiesConfig = scriptProperties.getProperties();
+
+      const config: TadauConfig = {};
+      const fixedDimensions: {[key: string]: string | number | boolean} = {};
+
+      for (const [k, v] of Object.entries(scriptPropertiesConfig)) {
+        if (k === 'apiSecret') {
+          config.apiSecret = v;
+        } else if (k === 'measurementId') {
+          config.measurementId = v;
+        } else {
+          fixedDimensions[k] = v;
+        }
+      }
+      config.fixedDimensions = fixedDimensions;
+      return config;
     } catch (error) {
       console.error('Tadau: Error loading configuration:', error);
     }

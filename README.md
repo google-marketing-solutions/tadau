@@ -100,8 +100,8 @@ tadau.send_ads_event(
 
 ## Configuration
 
-It is recommended to use the config.yaml file to instantiate Tadau to attach
-fixed dimensions to every hit sent via Measurement Protocol.
+For Python it is recommended to use the config.yaml file to instantiate Tadau to
+attach fixed dimensions to every hit sent via Measurement Protocol.
 
 ```yaml
 api_secret: {{api_secret}}
@@ -153,4 +153,25 @@ More details and other installation options
 
 # Edit the YAML file
 yq -i '.'deploy_id' = "foo" config.yaml
+```
+
+If you want to use fixed dimensions to attach to every hit in Apps Script you
+have to use `ScriptProperties`:
+
+```ts
+const scriptProperties = PropertiesService.getScriptProperties();
+scriptProperties.setProperties({
+  'apiSecret': 'foo',
+  'measurementId': 'bar',
+  'deployId': 'fake_id',
+  'deployInfra': 'fake_infra',
+  'deployCreatedTime': 'fake_created_time',
+  'deployUpdatedTime': 'fake_updated_time',
+});
+
+// Then you can instantiate Tadau as follows:
+tadau = new Tadau({
+  loadConfigFromScriptProperties: true,
+  optIn: true,
+  });
 ```
