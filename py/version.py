@@ -15,4 +15,4 @@
 """Tadau package."""
 
 # A new PyPI release will be pushed every time `__version__` is increased.
-__version__ = '1.0.4'
+__version__ = '1.0.5'

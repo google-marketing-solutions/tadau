@@ -28,7 +28,7 @@ pip install tadau
 Python:
 
 ```py
-from tadau.py.measurement_protocol import Tadau
+from tadau import Tadau
 tadau = Tadau(config_file_location='config.yaml')
 
 tadau.send_events([

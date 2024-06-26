@@ -37,9 +37,9 @@ setuptools.setup(
     author_email='gps-tadau+copybara@google.com',
     url='https://github.com/google-marketing-solutions/tadau',
     license='Apache 2.0',
-    packages=['tadau.py'],  # The setup.py is in the same folder as the package.
+    packages=['tadau'],  # The setup.py is in the same folder as the package.
     package_dir={
-        'tadau.py': '.',
+        'tadau': './',
     },
     include_package_data=True,
     scripts=[],

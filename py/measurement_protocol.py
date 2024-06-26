@@ -237,7 +237,7 @@ class Tadau:
           # Only adds params that aren't reserved keywords.
           if _is_valid_param(k, v, event_reserved_keys):
             params[k] = v
-          else:
+          elif k != 'name':
             logging.warning(
                 'Tadau: Parameter %s with value %s is not valid', k, v
             )

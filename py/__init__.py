@@ -12,3 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Allows importing Tadau at the top level.
+
+This is a workaround to allow importing Tadau class directly from the package
+without having to import the module.
+"""
+
+from .measurement_protocol import Tadau
