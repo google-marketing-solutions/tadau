@@ -51,7 +51,12 @@ def _is_valid_param(key: str, value: Any, reserved_keys: Sequence[str]) -> bool:
   Returns:
     True if the param is valid, False otherwise.
   """
-  return key not in reserved_keys and value is not None and value
+  return (
+      key not in reserved_keys
+      and value is not None
+      and value
+      and len(str(value)) < 500
+  )
 
 
 def _format_to_alphanumeric(text: str) -> str:
@@ -63,7 +68,7 @@ def _format_to_alphanumeric(text: str) -> str:
   Returns:
     The filtered text.
   """
-  return re.sub(r'[^a-zA-Z0-9-]', '', text)
+  return re.sub(r'[^a-zA-Z0-9_]', '', text)
 
 
 class Tadau:
@@ -298,7 +303,7 @@ class Tadau:
 
     self.send_events(
         [{
-            'name': 'ads-event',
+            'name': 'ads_event',
             'event_is_impact_action': True,
             'event_action': event_action,
             'event_context': event_context,
@@ -325,7 +330,7 @@ class Tadau:
 
     self.send_events(
         [{
-            'name': 'custom-event',
+            'name': 'custom_event',
             'event_action': event_action,
             'event_is_impact_action': event_is_impact_action,
             'event_context': event_context,
@@ -351,7 +356,7 @@ class Tadau:
 
     self.send_events(
         [{
-            'name': 'error-event',
+            'name': 'error_event',
             'error_message': error_message,
             'error_code': error_code,
             'error_location': error_location,

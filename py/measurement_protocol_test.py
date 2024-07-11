@@ -167,7 +167,7 @@ class MeasurementProtocolTest(absltest.TestCase):
           '9812176317',
       )
 
-      self.assertEqual(m.last_request.json()['events'][0]['name'], 'ads-event')
+      self.assertEqual(m.last_request.json()['events'][0]['name'], 'ads_event')
       self.assertEqual(
           m.last_request.json()['events'][0]['params'][
               'event_is_impact_action'
@@ -182,7 +182,7 @@ class MeasurementProtocolTest(absltest.TestCase):
       self.tadau.send_custom_event('leads-generated', False, '')
 
       self.assertEqual(
-          m.last_request.json()['events'][0]['name'], 'custom-event'
+          m.last_request.json()['events'][0]['name'], 'custom_event'
       )
 
   def test_error_event(self):
@@ -194,7 +194,7 @@ class MeasurementProtocolTest(absltest.TestCase):
       )
 
       self.assertEqual(
-          m.last_request.json()['events'][0]['name'], 'error-event'
+          m.last_request.json()['events'][0]['name'], 'error_event'
       )
 
   def test_not_opted_in_load(self):
@@ -215,6 +215,39 @@ class MeasurementProtocolTest(absltest.TestCase):
         )
 
       self.assertEqual(m.call_count, 0)
+
+  def test_alphanumeric_event_name(self):
+    with requests_mock.Mocker() as m:
+      m.post(requests_mock.ANY, status_code=204)
+
+      self.tadau.send_events([
+          {
+              'client_id': '123',
+              'name': 'event-name!!!'
+          }
+      ])
+
+      request_history = m.request_history
+
+      self.assertEqual(
+          request_history[0].json()['events'][0]['name'],
+          'eventname',
+      )
+
+  def test_long_param_value(self):
+    with requests_mock.Mocker() as m:
+      m.post(requests_mock.ANY, status_code=204)
+
+      self.tadau.send_events([{
+          'client_id': '123',
+          'name': 'event_name',
+          'long_param': 'a' * 500,
+      }])
+
+      request_history = m.request_history
+      self.assertNotIn(
+          'long_param', request_history[0].json()['events'][0]['params']
+      )
 
 if __name__ == '__main__':
   absltest.main()
