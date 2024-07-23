@@ -17,7 +17,7 @@
 
 import {setUpAppsScriptSimulator} from 'google3/javascript/apps/maestro/simulator/closure_apps_script_simulator-closurized';
 import 'jasmine';
-import {Tadau} from './measurement_protocol';
+import {Tadau} from './tadau';
 
 describe('Tadau', () => {
   let tadau: Tadau;
@@ -50,7 +50,7 @@ describe('Tadau', () => {
   it('should send events', () => {
     const events = [
       {
-        'name': 'test-event',
+        'name': 'test_event',
         'test_param': 'test_value',
       },
     ];
@@ -66,7 +66,7 @@ describe('Tadau', () => {
           'client_id': 'test_client_id',
           'events': [
             {
-              'name': 'test-event',
+              'name': 'test_event',
               'params': {
                 'test_param': 'test_value',
               },
@@ -96,7 +96,7 @@ describe('Tadau', () => {
           'client_id': 'test_client_id',
           'events': [
             {
-              'name': 'ads-event',
+              'name': 'ads_event',
               'params': {
                 'event_is_impact_action': true,
                 'event_action': 'test_action',
@@ -125,7 +125,7 @@ describe('Tadau', () => {
           'client_id': 'test_client_id',
           'events': [
             {
-              'name': 'custom-event',
+              'name': 'custom_event',
               'params': {
                 'event_action': 'test_action',
                 'event_is_impact_action': true,
@@ -155,7 +155,7 @@ describe('Tadau', () => {
           'client_id': 'test_client_id',
           'events': [
             {
-              'name': 'error-event',
+              'name': 'error_event',
               'params': {
                 'error_message': 'test_error_message',
                 'error_code': 'test_error_code',
@@ -172,7 +172,7 @@ describe('Tadau', () => {
   it('should not send events when not opt-in.', () => {
     const events = [
       {
-        'name': 'test-event',
+        'name': 'test_event',
         'test_param': 'test_value',
       },
     ];
@@ -234,7 +234,7 @@ describe('Tadau', () => {
 
     const events = [
       {
-        'name': 'test-event',
+        'name': 'test_event',
         'test_param': 'test_value',
       },
     ];
@@ -250,7 +250,7 @@ describe('Tadau', () => {
           'client_id': 'test_client_id',
           'events': [
             {
-              'name': 'test-event',
+              'name': 'test_event',
               'params': {
                 'test_fixed_dimension': 'test_fixed_value',
                 'test_param': 'test_value',
@@ -279,7 +279,7 @@ describe('Tadau', () => {
 
     const events = [
       {
-        'name': 'test-event',
+        'name': 'test_event',
         'test_param': 'test_value',
       },
     ];
@@ -295,7 +295,7 @@ describe('Tadau', () => {
           'client_id': 'test_client_id',
           'events': [
             {
-              'name': 'test-event',
+              'name': 'test_event',
               'params': {
                 'deployId': 'fake_id',
                 'deployInfra': 'fake_infra',

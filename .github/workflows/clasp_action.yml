@@ -75,7 +75,7 @@ jobs:
         id: clasp-push
         if: ${{ github.event_name	!= 'schedule'}}
         run: |
-          cd ts
+          cd appsscript
           ls -al
           clasp push -f
 
@@ -83,7 +83,7 @@ jobs:
         id: clasp-deploy
         if: ${{env.DEPLOYMENT_ID && (github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/main'))}}
         run: |
-          cd ts
+          cd appsscript
           clasp deploy -i "$DEPLOYMENT_ID" -d "$GITHUB_REF"
         env:
           DEPLOYMENT_ID: ${{ secrets.DEPLOYMENT_ID }}

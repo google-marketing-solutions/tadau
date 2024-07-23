@@ -43,12 +43,12 @@
  *   'click', 'my-campaign', 'google-ads', '123456789', 'ad', '123456789'
  * );
  * tadau.sendCustomEvent('click', true, 'my-campaign');
- * tadau.sendErrorEvent('error-message', '404', 'my-campaign', '123456789');
+ * tadau.sendErrorEvent('error_message', '404', 'my-campaign', '123456789');
  *
  * // Using events array.
  * tadau.sendEvents([
  *   {
- *     'name': 'ads-event',
+ *     'name': 'ads_event',
  *     'event_is_impact_action': true,
  *     'event_action': 'click',
  *     'event_context': 'my-campaign',
@@ -58,13 +58,13 @@
  *     'ads_resource_id': '123456789',
  *   },
  *   {
- *     'name': 'custom-event',
+ *     'name': 'custom_event',
  *     'event_action': 'click',
  *     'event_is_impact_action': true,
  *     'event_context': 'my-campaign',
  *   },
  *   {
- *     'name': 'error-event',
+ *     'name': 'error_event',
  *     'error_message': 'error-message',
  *     'error_code': '404',
  *     'error_location': 'my-campaign',
@@ -97,7 +97,7 @@ function isValidParam(
  * @return The formatted text.
  */
 function formatToAlphanumeric(text: string): string {
-  return text.replace(/[^a-zA-Z0-9-]/g, ''); // Use regex replacement directly
+  return text.replace(/[^a-zA-Z0-9_]/g, ''); // Use regex replacement directly
 }
 
 /**
@@ -235,9 +235,12 @@ export class Tadau {
           'client_id': clientId,
         };
 
-        const eventReservedKeys = [...this.reservedKeys, 'name'];
+        const eventReservedKeys = [...this.reservedKeys];
         const params = {...this.fixedDimensions};
         for (const [k, v] of Object.entries(row)) {
+          if (k === 'name') {
+            continue;
+          }
           if (isValidParam(k, v, eventReservedKeys)) {
             params[k] = v;
           } else {
@@ -291,7 +294,7 @@ export class Tadau {
   ): void {
     this.sendEvents([
       {
-        'name': 'ads-event',
+        'name': 'ads_event',
         'event_is_impact_action': true,
         'event_action': eventAction,
         'event_context': eventContext,
@@ -316,7 +319,7 @@ export class Tadau {
   ): void {
     this.sendEvents([
       {
-        'name': 'custom-event',
+        'name': 'custom_event',
         'event_action': eventAction,
         'event_is_impact_action': eventIsImpactAction,
         'event_context': eventContext,
@@ -339,7 +342,7 @@ export class Tadau {
   ): void {
     this.sendEvents([
       {
-        'name': 'error-event',
+        'name': 'error_event',
         'error_message': errorMessage,
         'error_code': errorCode,
         'error_location': errorLocation,
