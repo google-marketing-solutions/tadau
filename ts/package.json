@@ -1,0 +1,34 @@
+{
+  "name": "tadau",
+  "version": "1.0.0",
+  "description": "Tadau is a module to send hits to measurement protocol.",
+  "homepage": "https://github.com/google-marketing-solutions/tadau",
+  "main": "dist/src/tadau.js",
+  "types": "./dist/src/tadau.d.ts",
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "tsc -p ./tsconfig.json",
+    "test": "jasmine --config=jasmine.json --verbose"
+  },
+  "author": "Maximilian Weiss <maximilianw@google.com>",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "node-fetch": "^3.3.2",
+    "tls-test": "^0.0.1",
+    "js-yaml": "3.14.1"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^5.1.4",
+    "@types/js-yaml": "3.12.5",
+    "jasmine": "^5.2.0",
+    "js-yaml": "3.14.1",
+    "node-fetch": "^3.3.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  }
+}
