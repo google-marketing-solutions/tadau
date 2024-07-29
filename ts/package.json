@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "Tadau is a module to send hits to measurement protocol.",
   "homepage": "https://github.com/google-marketing-solutions/tadau",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/google-marketing-solutions/tadau.git",
+    "directory": "ts"
+  },
   "main": "dist/src/tadau.js",
   "types": "./dist/src/tadau.d.ts",
   "type": "module",
