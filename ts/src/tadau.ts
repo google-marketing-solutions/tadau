@@ -72,7 +72,7 @@
  * ]);
  */
 
-import * as crypto from 'crypto';
+import {randomUUID} from 'crypto';
 import * as fs from 'fs'; // from //third_party/javascript/typings/node
 import * as yaml from 'js-yaml'; // from //third_party/javascript/typings/js_yaml
 import fetch from 'node-fetch'; // from //third_party/javascript/typings/node_fetch
@@ -80,7 +80,7 @@ import fetch from 'node-fetch'; // from //third_party/javascript/typings/node_fe
 /**
  * This is used to mock the fetch function in tests.
  */
-export const TEST_ONLY = {fetch};
+export const TEST_ONLY = {fetch, randomUUID};
 
 /**
  * Checks if a parameter is valid.
@@ -239,7 +239,7 @@ export class Tadau {
     }
 
     for (const row of events) {
-      const clientId = row['client_id'] || crypto.randomUUID();
+      const clientId = row['client_id'] || TEST_ONLY.randomUUID();
       const eventName = row['name'] || null;
       const payload: {[key: string]: string | number | boolean | object} = {
         'non_personalized_ads': true,

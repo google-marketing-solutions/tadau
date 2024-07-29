@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "tsc -p ./tsconfig.json",
+    "build": "tsc -p ./tsconfig.json && cp -r ./tests/test_data ./dist/tests && sed -i.bak 's/yaml.safeLoad/yaml.default.safeLoad/g'  ./dist/src/tadau.js",
     "test": "jasmine --config=jasmine.json --verbose"
   },
   "author": "Maximilian Weiss <maximilianw@google.com>",

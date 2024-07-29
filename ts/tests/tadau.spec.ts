@@ -19,7 +19,6 @@
  * @fileoverview Tests for tadau.
  */
 
-import * as crypto from 'crypto';
 import 'jasmine';
 import {Response} from 'node-fetch'; // from //third_party/javascript/typings/node_fetch
 import {join} from 'path';
@@ -28,7 +27,7 @@ import {Tadau, TEST_ONLY} from '../src/tadau.js';
 
 const TEST_DATA_PATH = join(
   process.cwd(),
-  'corp/gtech/ads/infrastructure/tadau/ts/tests/test_data',
+  'tests/test_data',
 );
 
 const TEST_RESPONSE_OBJ = {
@@ -47,7 +46,7 @@ describe('Tadau', () => {
 
   beforeEach(() => {
     // tslint:disable:ban-module-namespace-object-escape
-    spyOn(crypto, 'randomUUID').and.returnValue('000-000-000-000-000');
+    spyOn(TEST_ONLY, 'randomUUID').and.returnValue('000-000-000-000-000');
     const fetchResult = new Response(JSON.stringify(TEST_RESPONSE_OBJ));
     fetchMock = spyOn(TEST_ONLY, 'fetch').and.resolveTo(fetchResult);
     tadau = new Tadau({
