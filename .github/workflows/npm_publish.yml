@@ -15,9 +15,11 @@
 name: Publish Package to npmjs
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
-    paths: [ts]
+    paths:
+      - ts/**
   release:
     types: [published]
 
