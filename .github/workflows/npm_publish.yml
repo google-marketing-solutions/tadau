@@ -15,9 +15,9 @@
 name: Publish Package to npmjs
 
 on:
-  workflow_dispatch:
   push:
     branches: [main]
+    paths: [ts]
   release:
     types: [published]
 
@@ -31,6 +31,8 @@ jobs:
       - name: Checkout repo
         id: checkout-repo
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
 
       - name: Setup Node
         id: setup-node-publish
@@ -41,7 +43,31 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish Package
+      - name: Compare npm with local (versions).
+        id: package_version
+        uses: Rober19/compare-npm-versions-ci@master
+        with:
+          path: './ts'
+          npm_package_name: tadau
+
+      - name: Echo version numbers.
+        run: |
+          echo "Version is  ${{ steps.package_version.outputs.version }} "
+          echo "Version NPM is  ${{ steps.package_version.outputs.pkg_npm_version }} "
+
+      - name: Increment commit package npm version equal or greater than npm version.
+        id: increment_version
+        if: steps.package_version.outputs.npm_is_greater == 'true'
+        run: |
+          echo "Committed package version is not up to date. Incrementing version..."
+          cd ts
+          git config --global user.name 'maximilianw-google'
+          git config --global user.email 'maximilianw@google.com'
+          npm version patch -m "Set package version to %s"
+          git push
+
+      - name: Publish Package.
+        id: publish_package
         run: |
           cd ts
           npm ci
