@@ -1,6 +1,6 @@
 # Tadau
 
-Tadau is an open-source library available in Python, TypeScript, and Apps Script
+Tadau is an open-source library available in Python, NodeJS, and Apps Script
 that simplifies sending tracking data to Google Analytics 4 (GA4) via the
 Measurement Protocol.
 
@@ -12,8 +12,7 @@ Key Features
     errors, or define your own custom events.
 *   Flexible Configuration: Configure Tadau using a YAML file or directly within
     your code.
-*   Cross-Platform Support: Works with Python, TypeScript, and Apps Script
-    projects.
+*   Cross-Platform Support: Works with Python, NodeJS, and Apps Script projects.
 
 ## Installation
 
@@ -23,7 +22,7 @@ Python:
 pip install tadau
 ```
 
-Type Script:
+NodeJS:
 
 ```sh
 npm install tadau
@@ -41,11 +40,15 @@ in your Apps Script Project. Give the library a name: e.g. `TadauLib`.
 
 ## Basic Usage
 
-Python:
+Tadau can be instantiated by passing parameters directly or by using a
+configuration YAML file. For the latter see the Configuration section for
+details.
+
+Python (example):
 
 ```py
 import tadau
-tadau = tadau.Tadau(config_file_location='config.yaml')
+tadau = tadau.Tadau(config_file_location='path/to/config.yaml')
 
 tadau.send_events([
     {
@@ -64,10 +67,10 @@ tadau.send_events([
 ])
 ```
 
-TypeScript:
+NodeJS (example):
 
-```ts
-import Tadau from 'tadau';
+```javascript
+import { Tadau } from 'tadau';
 const Tadau = new Tadau({
   apiSecret: 'YOUR_API_SECRET',
   measurementId: 'YOUR_MEASUREMENT_ID',
@@ -80,9 +83,23 @@ tadau.send_ads_event(
   );
 ```
 
+Alternative instantiation using a config file.
+
+```javascript
+import { Tadau } from 'tadau';
+
+const tadau = new Tadau ({
+    configFilePath: 'path/to/config.yaml'
+})
+
+tadau.send_ads_event(
+  'audience-created', 'data integration', 'GAds', '123456789', 'audienceList'
+  );
+```
+
 Apps Script:
 
-```js
+```javascript
 const TadauModule = TadauLib.exports || {}; // Get the module from the library
 const tadau = new TadauModule.Tadau({
   apiSecret: 'YOUR_API_SECRET',
@@ -115,7 +132,7 @@ fixed_dimensions:
     deploy_updated_time: {{deploy_updated_time}}
 ```
 
-The file variables can be set using the yaml python package:
+Optional: Set file variables using the yaml python package:
 
 ```sh
 pip install cloud-detect
