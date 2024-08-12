@@ -60,6 +60,8 @@ jobs:
               git config --global user.name 'maximilianw-google'
               git config --global user.email 'maximilianw@google.com'
               npm version patch -m "Set package version to %s"
+              git add .
+              git commit -m "Autoincrement package version."
               git push
           else
               echo "PKG_VERSION is higher than NPM_VERSION. Good to proceed."
