@@ -14,10 +14,10 @@
 
 """Implementation of Tadau in Python."""
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 import json
 import re
-from typing import Any, Dict, Sequence, Union, Optional
+from typing import Any, Optional, Union
 import uuid
 
 from absl import logging
@@ -241,7 +241,7 @@ class Tadau:
         client_id = row.get('client_id') or str(uuid.uuid4())
 
         # Sets client_id with an empty payload.
-        payload: Dict[str, Any] = {
+        payload: dict[str, Any] = {
             'non_personalized_ads': True,
             'client_id': f'{client_id}',
         }
