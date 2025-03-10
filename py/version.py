@@ -16,4 +16,4 @@
 
 # A new PyPI release will be pushed every time `__version__` is increased.
 # If the version is not increased, the package will not be pushed to PyPI.
-__version__ = '1.0.7'
+__version__ = '1.0.8'
