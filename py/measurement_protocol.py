@@ -268,10 +268,11 @@ class Tadau:
           payload['user_id'] = f'{user_id}'
 
         # Makes a request to the GA4 Measurement Protocol collect endpoint.
-        requests.post(
+        response = requests.post(
             url=self._target_url,
             data=json.dumps(payload),
         )
+        response.raise_for_status()
         logging.info(
             'Tadau: Successfully sent event: %s',
             payload,

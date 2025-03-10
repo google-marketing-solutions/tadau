@@ -214,6 +214,23 @@ class MeasurementProtocolTest(absltest.TestCase):
 
     self.assertEqual(m.call_count, 0)
 
+  @requests_mock.Mocker()
+  def test_raises_error_on_failed_request(self, mock_request):
+    mock_request.post(requests_mock.ANY, status_code=404)
+    with self.assertLogs(level='ERROR') as log_output:
+      self.tadau.send_ads_event(
+          'audience-created',
+          'data integration',
+          'GAds',
+          '123456789',
+          'audienceList',
+          '9812176317',
+      )
+      self.assertIn(
+          'Tadau: Error sending event to GA4 property',
+          log_output.output[0],
+      )
+
   def test_alphanumeric_event_name(self):
     with requests_mock.Mocker() as m:
       m.post(requests_mock.ANY, status_code=204)
