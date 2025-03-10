@@ -14,10 +14,10 @@
 
 """Implementation of Tadau in Python."""
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping
 import json
 import re
-from typing import Any, Optional, Union
+from typing import Any, Dict, Optional, Sequence, Union
 import uuid
 
 from absl import logging
@@ -148,10 +148,8 @@ class Tadau:
     self.fixed_dimensions = fixed_dimensions or dict()
 
     # Validates if opted in and used correctly.
-    if __debug__:
-      if not self.opt_in:
-        raise AssertionError('Tadau: Class initiated not opted in')
-      elif not self._is_valid_instance():
+    if __debug__ and self.opt_in:
+      if not self._is_valid_instance():
         raise AssertionError(
             'Tadau: Class could not be initiated because api_secret and/or'
             f' measurement_id is invalid ({self.api_secret},'
@@ -241,7 +239,7 @@ class Tadau:
         client_id = row.get('client_id') or str(uuid.uuid4())
 
         # Sets client_id with an empty payload.
-        payload: dict[str, Any] = {
+        payload: Dict[str, Any] = {
             'non_personalized_ads': True,
             'client_id': f'{client_id}',
         }

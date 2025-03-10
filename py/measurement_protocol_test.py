@@ -198,23 +198,21 @@ class MeasurementProtocolTest(absltest.TestCase):
       )
 
   def test_not_opted_in_load(self):
+    tadau = measurement_protocol.Tadau()
 
-    with self.assertRaises(AssertionError):
-      tadau = measurement_protocol.Tadau()
+    with requests_mock.Mocker() as m:
+      m.post(requests_mock.ANY, status_code=204)
 
-      with requests_mock.Mocker() as m:
-        m.post(requests_mock.ANY, status_code=204)
+      tadau.send_ads_event(
+          'audience-created',
+          'data integration',
+          'GAds',
+          '123456789',
+          'audienceList',
+          '9812176317',
+      )
 
-        tadau.send_ads_event(
-            'audience-created',
-            'data integration',
-            'GAds',
-            '123456789',
-            'audienceList',
-            '9812176317',
-        )
-
-      self.assertEqual(m.call_count, 0)
+    self.assertEqual(m.call_count, 0)
 
   def test_alphanumeric_event_name(self):
     with requests_mock.Mocker() as m:
