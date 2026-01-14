@@ -208,7 +208,7 @@ export class Tadau {
   private loadConfigFromFile(configFilePath: string): TadauConfig | null {
     try {
       const fileContent = fs.readFileSync(configFilePath, 'utf8');
-      const loadedConfig = yaml.safeLoad(fileContent) as TadauConfig;
+      const loadedConfig = yaml.load(fileContent) as TadauConfig;
       return loadedConfig;
     } catch (error) {
       console.error(
