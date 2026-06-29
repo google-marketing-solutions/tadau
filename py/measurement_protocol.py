@@ -258,7 +258,7 @@ class Tadau:
             )
 
         payload['events'] = [{
-            'name': _format_to_alphanumeric(row['name']),
+            'name': _format_to_alphanumeric(row['name']),  # pyrefly: ignore[bad-argument-type]
             'params': params,
         }]
 
