@@ -25,13 +25,13 @@
     "fs": "^0.0.1-security",
     "node-fetch": "^3.3.2",
     "tls-test": "^0.0.1",
-    "js-yaml": "3.14.1"
+    "js-yaml": "4.1.1"
   },
   "devDependencies": {
     "@types/jasmine": "^5.1.4",
     "@types/js-yaml": "3.12.5",
     "jasmine": "^5.2.0",
-    "js-yaml": "3.14.1",
+    "js-yaml": "4.1.1",
     "node-fetch": "^3.3.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
